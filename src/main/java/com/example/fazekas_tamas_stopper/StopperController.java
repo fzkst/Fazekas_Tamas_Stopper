@@ -6,7 +6,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -34,6 +36,12 @@ public class StopperController {
     private static Duration savedDuration = Duration.ofNanos(0);
     private Boolean firstRun = true;
     @FXML
+    private AnchorPane ap;
+
+
+
+
+    @FXML
     public void startStop(ActionEvent actionEvent) {
         LocalDateTime startTime = LocalDateTime.now();
         if (buttonStartStop.getText().equals("Start")){
@@ -49,6 +57,7 @@ public class StopperController {
                         } else {
                             elapsedTime = Duration.between(startTime, endTime).plus(savedDuration);
                         }
+                        //elapsedTime = Duration.between(startTime, endTime).plus(savedDuration);
                         long perc = elapsedTime.toMinutes();
                         long masodperc = elapsedTime.getSeconds();
                         long ezredmasodperc = elapsedTime.toMillis() % 1000;
@@ -65,19 +74,23 @@ public class StopperController {
             timer.cancel();
             buttonStartStop.setText("Start");
             buttonReszido.setText("Reset");
+            //savedDuration = Duration.ZERO;
         }
     }
 
     @FXML
     public void reszido(ActionEvent actionEvent) {
+        Stage stage = (Stage) ap.getScene().getWindow();
         if (buttonReszido.getText().equals("Reset")){
             reszidoBox.getChildren().clear();
             buttonStartStop.setText("Start");
             buttonReszido.setText("Részidő");
             labelStopWatch.setText("00:00.000");
             elapsedTime = Duration.ofNanos(0);
+            stage.setHeight(160);
         } else {
             Label label = new Label(String.valueOf(timeLabel));
+            stage.setMinHeight(stage.getHeight() + 10);
             reszidoBox.getChildren().add(label);
         }
 
